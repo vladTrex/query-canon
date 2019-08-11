@@ -6,7 +6,8 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import logo from "./logo.svg";
 import "./App.css";
-import TodoList from "./TodoList";
+import TodoList from './TodoList';
+import AddTodo from './AddTodo';
 
 const cache = new InMemoryCache();
 const link = new HttpLink({
@@ -26,6 +27,7 @@ function App() {
           </p>
         </header>
         <div>
+          <AddTodo />
           <TodoList />
         </div>
       </div>
