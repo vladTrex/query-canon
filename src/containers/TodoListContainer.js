@@ -4,6 +4,7 @@ import {graphql} from 'react-apollo';
 
 import TodoList from '../components/TodoList';
 import LoadingPlaceholder from '../components/common/LoadingPlaceholder';
+import ErrorPlaceholder from '../components/common/ErrorPlaceholder';
 
 export const todosListQuery = gql`
     query TodosListQuery {
@@ -21,8 +22,15 @@ const renderWhileLoadingHOC = (component, propName = 'data') =>
     renderComponent(component),
   );
 
+const renderForErrorHOC = (component, propName = "data") =>
+  branch(
+    props => props[propName].error,
+    renderComponent(component),
+  );
+
 const enhancedComponent = compose(
     graphql(todosListQuery),
+    renderForErrorHOC(ErrorPlaceholder),
     renderWhileLoadingHOC(LoadingPlaceholder),
 )(TodoList);
 
