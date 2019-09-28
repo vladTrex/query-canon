@@ -1,0 +1,6 @@
+{
+  "browsers": "chrome",
+  "appInitDelay": 3000,
+  "selectorTimeout": 3000,
+  "speed": 0.4
+}
