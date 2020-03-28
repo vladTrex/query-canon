@@ -9,7 +9,9 @@ import "./App.css";
 import TodoList from './containers/TodoListContainer';
 import AddTodo from './containers/AddTodoContainer';
 
-const cache = new InMemoryCache();
+const cache = new InMemoryCache({
+  dataIdFromObject: object => object.id || null
+});
 const link = new HttpLink({
   uri: 'http://localhost:4000/graphql'
 });

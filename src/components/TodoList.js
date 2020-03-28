@@ -1,14 +1,16 @@
 import React from 'react';
 
-const TodoList = ({ data: {error, todos} }) => {
-    if(error) return <p>{error.message}</p>;
+const TodoList = ({data: {error, todos}, onRemove}) => {
+    if (error) return <p>{error.message}</p>;
 
-    return(
+    return (
         <ul>
-            {todos.map(todo => <li key={todo.id}>{todo.title}</li>)}
+            {todos.map(todo => <li key={todo.id}>{todo.title}
+                <button onClick={() => onRemove(todo.id)}>remove</button>
+            </li>)}
         </ul>
     );
-}
+};
 
 export default TodoList;
 

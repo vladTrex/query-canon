@@ -1,4 +1,4 @@
-import {compose, branch, renderComponent} from 'recompose';
+import {compose, branch, renderComponent, withHandlers} from 'recompose';
 import gql from 'graphql-tag';
 import {graphql} from 'react-apollo';
 
@@ -16,6 +16,14 @@ export const todosListQuery = gql`
     }
 `;
 
+export const onRemoveTodo = gql`
+    mutation removeTodo($todoId: String!) {
+        removeTodo(todoId: $todoId) {
+            success
+        }
+    }
+`;
+
 const renderWhileLoadingHOC = (component, propName = 'data') =>
   branch(
     props => props[propName].loading,
@@ -28,10 +36,41 @@ const renderForErrorHOC = (component, propName = "data") =>
     renderComponent(component),
   );
 
+const withHandlersHOC = withHandlers({
+    onRemove: props => todoId => {
+        const { removeTodoMutation } = props;
+        removeTodoMutation({
+            variables: {
+                todoId
+            },
+            update(cache) {
+                const cachedData = cache.readQuery({
+                    query: todosListQuery
+                });
+
+                const {todos} = cachedData;
+                const updatedData = todos
+                    .filter(todo => todo.id !== todoId);
+
+                cache.writeQuery({
+                    query: todosListQuery,
+                    data: {
+                        todos: updatedData
+                    }
+                });
+            }
+        });
+    }
+});
+
 const enhancedComponent = compose(
     graphql(todosListQuery),
+    graphql(onRemoveTodo, {
+        name: 'removeTodoMutation'
+    }),
     renderForErrorHOC(ErrorPlaceholder),
     renderWhileLoadingHOC(LoadingPlaceholder),
+    withHandlersHOC
 )(TodoList);
 
 export default enhancedComponent;

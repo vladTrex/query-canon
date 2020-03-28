@@ -36,7 +36,7 @@ const withHandlersHOC = withHandlers({
                 });
             }
         });
-    },
+    }
 });
 
 const enhancedComponent = compose(
