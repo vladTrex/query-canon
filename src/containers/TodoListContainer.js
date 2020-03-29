@@ -6,19 +6,19 @@ import TodoList from '../components/TodoList';
 import LoadingPlaceholder from '../components/common/LoadingPlaceholder';
 import ErrorPlaceholder from '../components/common/ErrorPlaceholder';
 
-export const todosListQuery = gql`
-    query TodosListQuery {
-        todos {
-            id
+export const productsListQuery = gql`
+    query ProductsListQuery {
+        products {
+            _id
             title
             category
         }
     }
 `;
 
-export const onRemoveTodo = gql`
-    mutation removeTodo($todoId: String!) {
-        removeTodo(todoId: $todoId) {
+export const onRemoveProduct = gql`
+    mutation removeProduct($productId: String!) {
+        removeProduct(productId: $productId) {
             success
         }
     }
@@ -37,25 +37,27 @@ const renderForErrorHOC = (component, propName = "data") =>
   );
 
 const withHandlersHOC = withHandlers({
-    onRemove: props => todoId => {
-        const { removeTodoMutation } = props;
-        removeTodoMutation({
+    onRemove: props => productId => {
+        const { removeProductMutation } = props;
+
+        removeProductMutation({
             variables: {
-                todoId
+                productId
             },
             update(cache) {
                 const cachedData = cache.readQuery({
-                    query: todosListQuery
+                    query: productsListQuery
                 });
 
-                const {todos} = cachedData;
-                const updatedData = todos
-                    .filter(todo => todo.id !== todoId);
+                const {products} = cachedData;
+
+                const updatedData = products
+                    .filter(product => product._id !== productId);
 
                 cache.writeQuery({
-                    query: todosListQuery,
+                    query: productsListQuery,
                     data: {
-                        todos: updatedData
+                        products: updatedData
                     }
                 });
             }
@@ -64,9 +66,9 @@ const withHandlersHOC = withHandlers({
 });
 
 const enhancedComponent = compose(
-    graphql(todosListQuery),
-    graphql(onRemoveTodo, {
-        name: 'removeTodoMutation'
+    graphql(productsListQuery),
+    graphql(onRemoveProduct, {
+        name: 'removeProductMutation'
     }),
     renderForErrorHOC(ErrorPlaceholder),
     renderWhileLoadingHOC(LoadingPlaceholder),

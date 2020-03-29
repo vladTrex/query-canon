@@ -4,12 +4,12 @@ import {graphql} from 'react-apollo';
 
 import AddTodo from '../components/AddTodo';
 import LoadingPlaceholder from '../components/common/LoadingPlaceholder';
-import {todosListQuery} from './TodoListContainer';
+import {productsListQuery} from './TodoListContainer';
 
-const createTodo = gql`
-    mutation addTodo($title: String!, $category: String!){
-        addTodo(title: $title, category: $category){
-            id,
+const addProduct = gql`
+    mutation addProduct($title: String!, $category: String!){
+        addProduct(title: $title, category: $category){
+            _id,
             title,
             category
         }
@@ -28,11 +28,12 @@ const withHandlersHOC = withHandlers({
 
         mutate({
             variables: {title, category},
-            update(cache, { data: { addTodo } }) {
-                const { todos } = cache.readQuery({ query: todosListQuery });
+            update(cache, { data: { addProduct } }) {
+                debugger;
+                const { products } = cache.readQuery({ query: productsListQuery });
                 cache.writeQuery({
-                  query: todosListQuery,
-                  data: { todos: todos.concat([addTodo]) },
+                  query: productsListQuery,
+                  data: { products: products.concat([addProduct]) },
                 });
             }
         });
@@ -40,7 +41,7 @@ const withHandlersHOC = withHandlers({
 });
 
 const enhancedComponent = compose(
-    graphql(createTodo),
+    graphql(addProduct),
     renderWhileLoadingHOC(LoadingPlaceholder),
     withHandlersHOC
 )(AddTodo);
