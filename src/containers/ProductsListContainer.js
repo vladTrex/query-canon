@@ -1,40 +1,11 @@
-import {compose, branch, renderComponent, withHandlers} from 'recompose';
-import gql from 'graphql-tag';
+import {compose, withHandlers} from 'recompose';
 import {graphql} from 'react-apollo';
+import {renderForErrorHOC, renderWhileLoadingHOC} from '../shared/HOCs';
 
-import TodoList from '../components/TodoList';
+import ProductsList from '../components/ProductsList';
 import LoadingPlaceholder from '../components/common/LoadingPlaceholder';
 import ErrorPlaceholder from '../components/common/ErrorPlaceholder';
-
-export const productsListQuery = gql`
-    query ProductsListQuery {
-        products {
-            _id
-            title
-            category
-        }
-    }
-`;
-
-export const onRemoveProduct = gql`
-    mutation removeProduct($productId: String!) {
-        removeProduct(productId: $productId) {
-            success
-        }
-    }
-`;
-
-const renderWhileLoadingHOC = (component, propName = 'data') =>
-  branch(
-    props => props[propName].loading,
-    renderComponent(component),
-  );
-
-const renderForErrorHOC = (component, propName = "data") =>
-  branch(
-    props => props[propName].error,
-    renderComponent(component),
-  );
+import { productsListQuery, onRemoveProduct } from '../shared/graphql';
 
 const withHandlersHOC = withHandlers({
     onRemove: props => productId => {
@@ -73,6 +44,6 @@ const enhancedComponent = compose(
     renderForErrorHOC(ErrorPlaceholder),
     renderWhileLoadingHOC(LoadingPlaceholder),
     withHandlersHOC
-)(TodoList);
+)(ProductsList);
 
 export default enhancedComponent;

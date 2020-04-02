@@ -1,13 +1,14 @@
 import React from "react";
 import { ApolloProvider } from "react-apollo";
 import { ApolloClient } from 'apollo-client';
-import { HttpLink } from "apollo-link-http";
+import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { Route, Switch, Redirect, BrowserRouter as Router } from 'react-router-dom';
 
 import logo from "./logo.svg";
 import "./App.css";
-import TodoList from './containers/TodoListContainer';
-import AddTodo from './containers/AddTodoContainer';
+import TodoList from './containers/ProductsListContainer';
+import AddTodo from './containers/AddProductContainer';
 
 const cache = new InMemoryCache({
   dataIdFromObject: object => object._id || null
@@ -19,6 +20,15 @@ const link = new HttpLink({
 
 const client = new ApolloClient({link, cache});
 
+const mainScreen = () => {
+  return(
+      <div>
+        <AddTodo />
+        <TodoList />
+      </div>
+  );
+};
+
 function App() {
   return (
     <ApolloProvider client={client}>
@@ -26,13 +36,15 @@ function App() {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
-            Edit <code>src/App.js</code> and save to reload.
+            GraphQL Apollo Client Example
           </p>
         </header>
-        <div>
-          <AddTodo />
-          <TodoList />
-        </div>
+        <Router>
+          <Switch>
+            <Route path="/" component={mainScreen} />
+            <Redirect to="/"/>
+          </Switch>
+        </Router>
       </div>
     </ApolloProvider>
   );

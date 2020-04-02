@@ -1,26 +1,10 @@
-import {withHandlers, compose, branch, renderComponent} from 'recompose';
-import gql from 'graphql-tag';
+import {withHandlers, compose} from 'recompose';
 import {graphql} from 'react-apollo';
 
-import AddTodo from '../components/AddTodo';
+import AddProduct from '../components/AddProduct';
 import LoadingPlaceholder from '../components/common/LoadingPlaceholder';
-import {productsListQuery} from './TodoListContainer';
-
-const addProduct = gql`
-    mutation addProduct($title: String!, $category: String!){
-        addProduct(title: $title, category: $category){
-            _id,
-            title,
-            category
-        }
-    }
-`;
-
-const renderWhileLoadingHOC = (component, propName = 'result') =>
-  branch(
-    props => props[propName].loading,
-    renderComponent(component),
-  );
+import { productsListQuery, addProduct } from '../shared/graphql';
+import { renderWhileLoadingHOC } from '../shared/HOCs';
 
 const withHandlersHOC = withHandlers({
     onSave: props => (title, category) => {
@@ -29,7 +13,6 @@ const withHandlersHOC = withHandlers({
         mutate({
             variables: {title, category},
             update(cache, { data: { addProduct } }) {
-                debugger;
                 const { products } = cache.readQuery({ query: productsListQuery });
                 cache.writeQuery({
                   query: productsListQuery,
@@ -42,8 +25,8 @@ const withHandlersHOC = withHandlers({
 
 const enhancedComponent = compose(
     graphql(addProduct),
-    renderWhileLoadingHOC(LoadingPlaceholder),
+    renderWhileLoadingHOC(LoadingPlaceholder, 'result'),
     withHandlersHOC
-)(AddTodo);
+)(AddProduct);
 
 export default enhancedComponent;

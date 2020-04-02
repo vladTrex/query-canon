@@ -14,7 +14,7 @@ const useStyles = makeStyles({
     },
   });
 
-const TodoList = ({ data: { error, products }, onRemove }) => {
+const ProductsList = ({ data: { error, products }, onRemove }) => {
   const classes = useStyles();
   if (error) return <p>{error.message}</p>;
 
@@ -52,4 +52,4 @@ const TodoList = ({ data: { error, products }, onRemove }) => {
   );
 };
 
-export default TodoList;
+export default ProductsList;
