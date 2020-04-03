@@ -1,6 +1,16 @@
 import gql from "graphql-tag";
 
 // queries
+export const me = gql`
+    query me {
+        me {
+            _id
+            name
+            bio
+        }
+    }
+`;
+
 export const productsListQuery = gql`
     query ProductsListQuery {
         products {
@@ -26,6 +36,16 @@ export const addProduct = gql`
             _id,
             title,
             category
+        }
+    }
+`;
+
+export const updateMe = gql`
+    mutation updateMe($bio: String!){
+        updateMe(bio: $bio){
+            _id
+            name
+            bio
         }
     }
 `;
