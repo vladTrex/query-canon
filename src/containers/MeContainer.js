@@ -9,51 +9,51 @@ const Me = () => {
     let input;
 
     return (
-    <div>
-        <Query
-            query={me}
-        >
-            {resp => {
-                const {loading, data, error} = resp;
-                if (loading) return 'Loading...';
-                if (error) return 'Error';
+        <div>
+            <Query
+                query={me}
+            >
+                {resp => {
+                    const {loading, data, error} = resp;
+                    if (loading) return 'Loading...';
+                    if (error) return 'Error';
 
-                return (<div>
-                    <h2>{data.me.name}</h2>
+                    return (<div>
+                        <h2>{data.me.name}</h2>
 
-                    {isUpdate ? (<Mutation mutation={updateMe}>
-                        {(updateMe) => (
-                            <div>
-                                <form
-                                    onSubmit={e => {
-                                        e.preventDefault();
-                                        updateMe({
-                                            variables: {bio: input.value}
-                                        });
-                                        input.value = "";
-                                        setIsUpdate(isUpdate => !isUpdate);
-                                    }}
-                                        >
+                        {isUpdate ? (<Mutation mutation={updateMe}>
+                            {(updateMe) => (
+                                <div>
+                                    <form
+                                        onSubmit={e => {
+                                            e.preventDefault();
+                                            updateMe({
+                                                variables: {bio: input.value}
+                                            });
+                                            input.value = "";
+                                            setIsUpdate(isUpdate => !isUpdate);
+                                        }}
+                                    >
                                         <input
-                                        ref={node => {
-                                        input = node;
-                                    }}
+                                            ref={node => {
+                                                input = node;
+                                            }}
                                         />
                                         <button type="submit">Update Bio</button>
-                                        </form>
-                                        </div>
-                                        )}
-                                        </Mutation>) : data.me.bio}
+                                    </form>
+                                </div>
+                            )}
+                        </Mutation>) : data.me.bio}
 
-                                        <button onClick={() => setIsUpdate((isUpdate) => !isUpdate)}>
-                                        {isUpdate ? "Close" : "Update"}
-                                        </button>
+                        <button onClick={() => setIsUpdate((isUpdate) => !isUpdate)}>
+                            {isUpdate ? "Close" : "Update"}
+                        </button>
 
-                                        </div>)
-                                        }}
-                                        </Query>
-                                        </div>
-                                        );
-                                        };
+                    </div>)
+                }}
+            </Query>
+        </div>
+    );
+};
 
-                                        export default Me;
+export default Me;
