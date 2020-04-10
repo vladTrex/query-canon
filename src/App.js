@@ -12,7 +12,10 @@ import AddTodo from './containers/AddProductContainer';
 import Me from './containers/MeContainer';
 
 const cache = new InMemoryCache({
-    dataIdFromObject: object => object._id || null
+    dataIdFromObject: object => {
+        console.log(object);
+        return object._id || null;
+    }
 });
 
 const link = new HttpLink({

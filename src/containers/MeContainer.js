@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {Query, Mutation} from 'react-apollo';
-import gql from "graphql-tag";
 
 import {me, updateMe} from '../shared/graphql';
 

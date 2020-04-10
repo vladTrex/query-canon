@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 class AddProduct extends Component {
     state = {
         title: '',
-        category: ''
+        category: 'business'
     };
 
     handleSave = () => {
@@ -24,12 +24,11 @@ class AddProduct extends Component {
                 placeholder="Title"
                 itemID='todoInput'
             />
-            <input 
-                value={this.state.category} 
-                onChange={e => this.setState({category: e.target.value})} 
-                placeholder="Category"
-                itemID='todoCategory'
-            />
+            <select value={this.state.category} onChange={e => this.setState({category: e.target.value})}>
+                <option value="business">Business</option>
+                <option value="personal">Personal</option>
+                <option value="group">Group</option>
+            </select>
             <button onClick={this.handleSave} itemID='saveButton'>Save</button>
         </div>);
     }
