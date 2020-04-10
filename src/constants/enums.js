@@ -1,0 +1,5 @@
+export const CATEGORY_ENUMS = {
+  BUSINESS: 'BUSINESS',
+  PERSONAL: 'PERSONAL',
+  GROUP: 'GROUP'
+};

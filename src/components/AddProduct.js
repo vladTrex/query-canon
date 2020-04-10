@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
+import {CATEGORY_ENUMS} from "../constants/enums";
 
 class AddProduct extends Component {
     state = {
         title: '',
-        category: 'business'
+        category: CATEGORY_ENUMS.BUSINESS
     };
 
     handleSave = () => {
@@ -25,9 +26,9 @@ class AddProduct extends Component {
                 itemID='todoInput'
             />
             <select value={this.state.category} onChange={e => this.setState({category: e.target.value})}>
-                <option value="business">Business</option>
-                <option value="personal">Personal</option>
-                <option value="group">Group</option>
+                <option value={CATEGORY_ENUMS.BUSINESS}>Business</option>
+                <option value={CATEGORY_ENUMS.PERSONAL}>Personal</option>
+                <option value={CATEGORY_ENUMS.GROUP}>Group</option>
             </select>
             <button onClick={this.handleSave} itemID='saveButton'>Save</button>
         </div>);
