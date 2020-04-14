@@ -4,6 +4,7 @@ import {ApolloClient} from 'apollo-client';
 import {HttpLink} from 'apollo-link-http';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 import {Route, Switch, Redirect, BrowserRouter as Router} from 'react-router-dom';
+import { ApolloLink, concat } from 'apollo-link';
 
 import logo from "./logo.svg";
 import "./App.css";
@@ -13,16 +14,25 @@ import Me from './containers/MeContainer';
 
 const cache = new InMemoryCache({
     dataIdFromObject: object => {
-        console.log(object);
         return object._id || null;
     }
 });
 
-const link = new HttpLink({
+const authMiddleware = new ApolloLink((operation, forward) => {
+    operation.setContext({
+        headers: {
+            authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImNsaWVudElkIjoyfQ.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJjbGllbnRJZCI6MTAxOX0.hijwjazdOx_4HbxpHC1hvvftfU6oOE1ck4UKNaOnA6Y',
+        }
+    });
+
+    return forward(operation);
+})
+
+const httpLink = new HttpLink({
     uri: 'http://localhost:4000/graphql'
 });
 
-const client = new ApolloClient({link, cache});
+const client = new ApolloClient({link: concat(authMiddleware, httpLink), cache});
 
 const mainScreen = () => {
     return (

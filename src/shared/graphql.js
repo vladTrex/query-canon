@@ -31,8 +31,8 @@ export const onRemoveProduct = gql`
 `;
 
 export const addProduct = gql`
-    mutation addProduct($title: String!, $category: AllowedCategories!){
-        addProduct(title: $title, category: $category){
+    mutation addProduct($input: ProductInput){
+        addProduct(input: $input){
             _id,
             title,
             category

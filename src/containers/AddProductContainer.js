@@ -9,9 +9,10 @@ import { renderWhileLoadingHOC } from '../shared/HOCs';
 const withHandlersHOC = withHandlers({
     onSave: props => (title, category) => {
         const {mutate} = props;
+        const product = {title, category};
 
         mutate({
-            variables: {title, category},
+            variables: {input: product},
             update(cache, { data: { addProduct } }) {
                 const { products } = cache.readQuery({ query: productsListQuery });
                 cache.writeQuery({
